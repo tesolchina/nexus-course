@@ -1,0 +1,171 @@
+# ============================================================
+# Nexus · 智课 — Course-as-Code
+# This file IS the course. Fork it on GitHub/Gitee, edit it,
+# and the platform serves the new version. Zero data lock-in.
+# ============================================================
+
+meta:
+  id: genai-101
+  title: "GenAI 101 · 大模型入门"
+  subtitle: "Zero to agent with LLMs — watch, practice, build"
+  language: en
+  teacher: "Dr. Simon Wang"
+  repo: "https://github.com/tesolchina/genAI2026"
+  xpPerQuestion: 15
+  avatar:
+    name: "Nova"
+    emoji: "🪐"
+    voice: "en-US-JennyNeural"
+    prompt: |
+      You are Nova, an encouraging AI tutor on the Nexus learning platform.
+      You coach a student who is learning how large language models work and
+      how to build small AI tools. Keep replies short (under 120 words) and
+      friendly. Follow the hints-not-answers rule: give hints, small steps
+      and questions, never the full solution to a quiz or code task.
+      End most replies with one short question that keeps the learner going.
+
+levels:
+  - id: l1
+    title: "LLM Basics"
+    emoji: "🧠"
+    description: "What a large language model is, and what it can and cannot do."
+    video:
+      url: "https://www.youtube.com/embed/wjZofJX0v4M"
+      caption: "Watch: 'But what is a GPT?' (3Blue1Brown, 25 min). Focus on how the model predicts the next word."
+    quiz:
+      - question: "What does an LLM actually do, at its core, when it generates text?"
+        options:
+          - "It searches the internet for the best answer and copies it."
+          - "It predicts the most likely next token given the context."
+          - "It runs a database of facts and retrieves the matching row."
+          - "It translates your question into another language and back."
+        answer: 1
+        hint: "Think about the word 'generative' — what is being generated, one step at a time?"
+      - question: "Why can an LLM still produce a wrong-sounding but confident answer ('hallucination')?"
+        options:
+          - "Because it was trained to be maximally persuasive rather than factually perfect."
+          - "Because its training data is always 100% correct."
+          - "Because it has a bug in its database lookup."
+          - "Because the network is too small to store any facts."
+        answer: 0
+        hint: "The model optimizes for plausible text, not for truth. Plausibility is a weaker target."
+      - question: "Which of these tasks is an LLM alone (no extra tools) least suited for?"
+        options:
+          - "Summarizing a long paragraph you paste into the chat."
+          - "Looking up today's live stock price."
+          - "Explaining a concept in simpler words."
+          - "Brainstorming three outline options for an essay."
+        answer: 1
+        hint: "Anything that needs fresh, real-time data is outside what the weights know."
+    code:
+      title: "Fix the prompt loop"
+      description: "The function below builds a list of prompts but the loop skips the last item. Fix the range so all 3 prompts are printed."
+      language: python
+      starter: |
+        def build_prompts(items):
+            prompts = []
+            for i in range(len(items) - 1):   # <-- bug: skips the last item
+                prompts.append(f"Explain '{items[i]}' like I am 12.")
+            return prompts
+
+        items = ["token", "context window", "temperature"]
+        for p in build_prompts(items):
+            print(p)
+
+  - id: l2
+    title: "Prompt Patterns"
+    emoji: "🪄"
+    description: "Role prompting, few-shot examples, and output constraints."
+    video:
+      url: "https://www.youtube.com/embed/4S7J6Z3Yf_c"
+      caption: "Watch: a short intro to prompt patterns (or any prompt-engineering primer you find)."
+    quiz:
+      - question: "What is 'few-shot prompting'?"
+        options:
+          - "Giving the model several example input/output pairs before the real task."
+          - "Asking the model the same question many times until it answers."
+          - "Sending multiple API requests in one HTTP call."
+          - "Training the model on your own examples before using it."
+        answer: 0
+        hint: "'Few-shot' = a few examples shown in the prompt, not a few training epochs."
+      - question: "You want a strictly JSON output. Which approach is most reliable?"
+        options:
+          - "Ask politely in natural language and hope for the best."
+          - "Describe the exact JSON schema and tell it to output only JSON, then validate and retry on failure."
+          - "Run the model twice and merge the answers."
+          - "Translate the request into JSON first."
+        answer: 1
+        hint: "Prompting narrows the space; validation + retry closes the loop."
+      - question: "A student asks the tutor 'just give me the answer'. What should the tutor do under hints-not-answers?"
+        options:
+          - "Give the answer immediately to keep the student happy."
+          - "Explain why it guides instead, and offer the next hint or a smaller step."
+          - "Refuse to talk to the student again."
+          - "Give a slightly wrong answer so they learn to check."
+        answer: 1
+        hint: "The guardrail is about teaching, not about punishment or deception."
+    code:
+      title: "Sentiment classifier"
+      description: "Write the classify() function: return 1 if the text contains a positive word, -1 for a negative word, else 0. Words: good/great/awesome vs bad/terrible/boring."
+      language: python
+      starter: |
+        POSITIVE = ["good", "great", "awesome"]
+        NEGATIVE = ["bad", "terrible", "boring"]
+
+        def classify(text):
+            # TODO: return 1 / -1 / 0
+            return 0
+
+        for t in ["this course is awesome", "the video was boring", "ok"]:
+            print(t, "->", classify(t))
+
+  - id: l3
+    title: "Agent Workflows"
+    emoji: "🤖"
+    description: "Chain model calls, tools and memory into a tiny agent loop."
+    video:
+      url: "https://www.youtube.com/embed/AzOMk9Fp5mc"
+      caption: "Watch: how agent loops work — think -> act -> observe -> repeat."
+    quiz:
+      - question: "In a simple agent loop, what is the role of the 'observe' step?"
+        options:
+          - "It feeds the tool's result back into the model as new context."
+          - "It waits for the user to press a button."
+          - "It deletes old messages from the conversation."
+          - "It checks whether the model is a real agent."
+        answer: 0
+        hint: "The loop is: the model picks an action, a tool runs, and its output becomes input again."
+      - question: "Why give an agent 'memory' (the conversation history) at all?"
+        options:
+          - "Because LLMs have no idea what was said earlier in the same session."
+          - "Because it makes the API calls cheaper."
+          - "Because the tools refuse to run without context."
+          - "Because memory replaces the need for a system prompt."
+        answer: 0
+        hint: "Each API call is stateless; the history is what makes it feel continuous."
+      - question: "Which design best limits the cost of an agent that keeps looping?"
+        options:
+          - "Unlimited steps; the model will stop naturally."
+          - "A max-steps counter, plus caching repeated tool outputs."
+          - "Making the loop sleep 5 seconds between steps."
+          - "Using a bigger model so it finishes faster."
+        answer: 1
+        hint: "Budget the loop: cap iterations and reuse results you already computed."
+    code:
+      title: "Mini agent loop"
+      description: "Complete the run() function: keep calling step(current) while it returns a string starting with 'next:', but stop after maxSteps (3). Return the number of steps taken and the final value."
+      language: javascript
+      starter: |
+        // Simulates one agent step: returns "next: <value>" or "done: <value>"
+        function step(current) {
+          return current.length >= 12 ? "done: " + current : "next: " + current + "x";
+        }
+
+        function run(start, maxSteps) {
+          let current = start;
+          let steps = 0;
+          // TODO: loop while step() says "next:" and steps < maxSteps
+          return { steps, final: current };
+        }
+
+        console.log(JSON.stringify(run("ab", 3)));

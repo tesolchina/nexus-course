@@ -1,0 +1,15 @@
+{
+  "name": "nexus-course",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Nexus 智课 - Course-as-Code learning platform. Zero runtime dependencies, deploy-first.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server/index.mjs",
+    "dev": "node --watch server/index.mjs",
+    "reveal": "node scripts/reveal.mjs"
+  }
+}

@@ -1,0 +1,165 @@
+# ============================================================
+# Nexus · 智课 — ATI & Data Governance · 271B Bus Case
+# Course-as-Code for the KMB Route 271B ATI teaching case.
+# ============================================================
+
+meta:
+  id: ati-271b
+  code: ati271b
+  title: "ATI & 数据治理 · 271B 巴士案例"
+  subtitle: "用 accessinfo.hk 和《公开资料守则》追踪公共数据"
+  language: zh
+  teacher: "Dr. Simon Wang"
+  repo: "https://github.com/tesolchina/GCAP3056"
+  xpPerQuestion: 15
+  avatar:
+    name: "Lyra"
+    emoji: "🔍"
+    voice: "zh-CN-XiaoxiaoNeural"
+    prompt: |
+      You are Lyra, an AI investigative tutor on the Nexus learning platform.
+      Your specialty is public accountability, data governance, and the
+      Code on Access to Information (ATI) in Hong Kong.
+      Keep replies short (under 120 words), practical, and hint-led.
+      Never hand over a full answer.
+
+levels:
+  - id: intro
+    title: "案件背景"
+    description: |
+      2026年4月28日，九巴271B路线发生偏离路线事件。
+      本节通过情景动画了解事件经过，并思考为什么没有人第一时间发现。
+    blocks:
+      - type: scene
+        animation: bus-wrong-route
+        title: "2026年4月28日 · 271B路线"
+        caption: "早上8:15，巴士车长走错路线，ETA显示失灵，乘客延迟10分钟。"
+
+      - type: mc
+        question: "上述情景中，有多少方可能第一时间发现了这次偏离路线？"
+        options:
+          - "0方（无人发现，直到乘客投诉）"
+          - "1方（KMB或运输署其中之一）"
+          - "2方（KMB和运输署都发现了）"
+          - "3方以上"
+        answer: 0
+        hint: "提示：KMB内部无GPS警报系统，运输署无实时监控，乘客不投诉就无人知——这就是系统性缺口。"
+
+      - type: mc
+        question: "这次事件最终是怎样被记录下来的？"
+        options:
+          - "KMB自动报警系统发现并报告"
+          - "运输署实时监控发现"
+          - "乘客向运输署提交投诉，运输署转发给九巴要求回应"
+          - "巴士车长主动报告"
+        answer: 2
+        hint: "事件是被动发现的——乘客是唯一触发点。这说明现有监测机制存在系统性缺口。"
+
+      - type: tutor
+        prompt: "引导讨论：还有哪些公共事件是因为没有自动监测系统而长期未被发现？例如空气质素、食品安全、道路维修？"
+
+  - id: ati101
+    title: "写好一份 ATI 请求"
+    description: |
+      学习《公开资料守则》的核心结构，以及如何设计有效的问题。
+      以271B ATI请求为实战模板。
+    blocks:
+      - type: mc
+        question: "《公开资料守则》规定的法定回复时限是多少？"
+        options:
+          - "5个工作日"
+          - "10个工作日"
+          - "14个自然日"
+          - "30个工作日"
+        answer: 1
+        hint: "法定时限是10个工作日，不包括周末和公众假期。部门如需延期必须提前通知。"
+
+      - type: mc
+        question: "在271B ATI请求中，Q2问「是否有GPS警报系统」比问「这次KMB知道吗」更有策略价值。为什么？"
+        options:
+          - "因为GPS是新技术"
+          - "因为它追问系统的存在，而非单一事件——揭示制度性缺口"
+          - "因为运输署最关心技术细节"
+          - "因为它可以绕过法律程序"
+        answer: 1
+        hint: "好的ATI问题不是要一个具体答案，而是追问系统本身的存在与否——从而揭示监管框架的缺口。"
+
+      - type: mc
+        question: "ATI请求中的「目的声明」（Purpose Statement）有什么作用？"
+        options:
+          - "纯粹是礼貌用语"
+          - "表明请求的正当用途（如学术研究/教学），有助于部门考虑是否合作"
+          - "法律上强制部门必须回答"
+          - "加快部门审批速度"
+        answer: 1
+        hint: "表明正当用途有助于部门决定是否豁免费用或加速处理，对学术研究者尤其重要。"
+
+      - type: tutor
+        prompt: "引导分析：对比271B ATI请求中的5个问题(Q1-Q5)，哪些是在追问「这次事件」，哪些是在追问「系统本身」？这种区分对公民调查有什么价值？"
+
+  - id: followup
+    title: "跟进与数据治理"
+    description: |
+      ATI请求提交后如何跟进？收到回复后如何处理？数据治理的教学原则是什么？
+    blocks:
+      - type: mc
+        question: "如果运输署回复称「有关资料不公开」，最合理的第一步是什么？"
+        options:
+          - "直接放弃"
+          - "在社交媒体批评部门"
+          - "先阅读豁免理由（《守则》第2部），如不同意可要求内部覆检"
+          - "向法院起诉"
+        answer: 2
+        hint: "部门必须说明豁免的法律依据。你可以要求内部覆检，或向申诉专员公署投诉。"
+
+      - type: mc
+        question: "在教学和研究中，使用ATI回应材料时最重要的数据治理原则是什么？"
+        options:
+          - "直接公开所有收到的文件"
+          - "只使用已公开或经过匿名化处理的版本，尊重隐私和保密义务"
+          - "删除所有对政府不利的回应"
+          - "只引用来自政府官网的材料"
+        answer: 1
+        hint: "ATI回应可能含第三方信息或未经同意的个人数据。教学中应只用已公开或匿名化版本。"
+
+      - type: tutor
+        prompt: "综合讨论：如果你是香港数据治理政策的顾问，基于271B案例，你会向运输署提出哪3条具体建议？请结合「监测系统」「问责机制」「数据公开」三个维度。"
+
+  # Legacy fallback quiz+code (for backward compat with older renderer)
+  - id: coding
+    title: "代码实战"
+    description: "用 Python 解析 ATI 请求状态，过滤敏感信息，统计回应类别。"
+    quiz:
+      - question: "ATI守则规定政府部门应在多少个工作日内回复？"
+        options:
+          - "5个工作日"
+          - "10个工作日"
+          - "14个工作日"
+          - "30个工作日"
+        answer: 1
+        hint: "法定时限是10个工作日。"
+      - question: "271B ATI请求中，Q2问「是否有GPS警报系统」追问的是什么？"
+        options:
+          - "技术细节"
+          - "系统是否存在（制度性缺口）"
+          - "KMB员工责任"
+          - "巴士路线信息"
+        answer: 1
+        hint: "追问系统本身的存在，揭示监管框架的缺口。"
+    code:
+      language: python3
+      title: "解析 ATI 请求状态"
+      description: |
+        写一个函数 check_days_left(submitted, today)，
+        计算两个日期之间相差多少天，判断是否超过10个工作日。
+      starter: |
+        from datetime import datetime
+
+        def check_days_left(submitted, today):
+            # submitted 和 today 格式为 "YYYY-MM-DD"
+            # 返回字符串: "还剩 X 天" / "已逾期 X 天"
+            # 简化版：假设每天都是工作日
+            pass
+
+        print(check_days_left("2026-06-01", "2026-06-05"))
+        print(check_days_left("2026-06-01", "2026-06-15"))

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nexus · 智课</title>
+    <meta name="description" content="Course-as-Code learning platform: enter a code or paste a GitHub URL." />
+    <link rel="stylesheet" href="/styles.css?v=7" />
+  </head>
+  <body>
+
+    <!-- ========== LANDING PAGE ========== -->
+    <div id="landing" class="landing">
+      <div class="landing-logo">⚡ Nexus · 智课</div>
+      <p class="landing-tagline">Course-as-Code — load any course with a code or a GitHub URL</p>
+
+      <div class="role-cards">
+        <!-- Student card -->
+        <div class="role-card">
+          <div class="role-card-icon">🎓</div>
+          <h2>Student</h2>
+          <p class="muted">Enter a course code or paste a GitHub URL to start learning.</p>
+          <input type="text" id="course-code" placeholder="Course code (e.g. ati271b)" autocomplete="off" />
+          <p class="or-text">or paste a GitHub raw URL</p>
+          <input type="text" id="github-url" placeholder="https://raw.githubusercontent.com/.../course.yaml" autocomplete="off" />
+          <button class="btn btn-lg" id="load-course-btn">Load Course</button>
+          <p id="load-error" class="error" style="margin-top:8px"></p>
+          <p id="load-success" class="success" style="margin-top:8px"></p>
+          <!-- Registry preview -->
+          <div id="registry-preview" class="registry-preview">
+            <p class="muted" style="font-size:12px;margin:12px 0 6px">Or choose from the catalog:</p>
+            <div id="registry-list"></div>
+          </div>
+        </div>
+
+        <!-- Teacher card -->
+        <div class="role-card">
+          <div class="role-card-icon">📊</div>
+          <h2>Teacher</h2>
+          <p class="muted">Create classroom sessions, view live stats, manage course registry.</p>
+          <a class="btn btn-lg" href="#/login" style="display:block;text-align:center;text-decoration:none">Teacher Login</a>
+        </div>
+      </div>
+
+      <p class="landing-footer muted">
+        Powered by Course-as-Code — every course is a YAML file on GitHub.
+      </p>
+    </div>
+
+    <!-- ========== MAIN APP (shown after course loaded) ========== -->
+
+    <!-- Top HUD: XP / level / codename -->
+    <header class="hud hidden" id="app-hud">
+      <a href="#/" class="brand" data-testid="link-home">⚡ Nexus</a>
+      <nav class="level-dots" id="level-dots" data-testid="level-dots"></nav>
+      <div class="hud-right">
+        <button class="btn-ghost" id="btn-guides" data-testid="button-guides" title="Community guides">📖 攻略</button>
+        <div class="xp-box" data-testid="xp-box">
+          <span id="xp-label" class="xp-label">Lv.1</span>
+          <div class="xp-bar"><div id="xp-fill" class="xp-fill"></div></div>
+          <span id="xp-num" class="xp-num">0 XP</span>
+        </div>
+        <button class="codename" id="codename" data-testid="codename" title="Your anonymous ID">👤 …</button>
+        <span id="session-badge" class="session-badge hidden" title="你在课堂中">📚 <span id="session-badge-code"></span></span>
+      </div>
+    </header>
+
+    <!-- Main stage -->
+    <main id="stage" class="stage container hidden" data-testid="stage">
+      <p class="muted center">Loading course…</p>
+    </main>
+
+    <!-- Floating AI avatar -->
+    <div class="avatar-wrap hidden" id="avatar-wrap" data-testid="avatar-wrap">
+      <button class="avatar-btn" id="avatar-btn" data-testid="avatar-btn" title="Ask the AI tutor">
+        <span class="avatar-ring"></span>
+        <span class="avatar-face" id="avatar-face">🪐</span>
+        <span class="avatar-badge" id="avatar-badge">●</span>
+      </button>
+      <div class="avatar-panel hidden" id="avatar-panel" data-testid="avatar-panel">
+        <div class="avatar-head">
+          <span id="avatar-name">Nova</span>
+          <div class="avatar-tools">
+            <label class="tts-toggle" title="Voice">
+              <input type="checkbox" id="tts-toggle" checked /> 🔊
+            </label>
+            <button class="btn-ghost" id="avatar-close">✕</button>
+          </div>
+        </div>
+        <div class="avatar-chat" id="avatar-chat" data-testid="avatar-chat"></div>
+        <form id="avatar-form" class="avatar-form">
+          <input id="avatar-input" placeholder="Ask Nova…" data-testid="avatar-input" />
+          <button class="btn" data-testid="avatar-send">Send</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Recovery modal -->
+    <div class="modal hidden" id="recover-modal" data-testid="recover-modal">
+      <div class="modal-card">
+        <h3>找回匿名 ID</h3>
+        <p class="muted">输入你的 SHA-256 哈希（或本机自动恢复）。云端只有哈希，没有你的真实身份。</p>
+        <input id="recover-input" placeholder="Paste your hash…" data-testid="recover-input" />
+        <p id="recover-msg" class="error"></p>
+        <div class="row-between">
+          <button class="btn-ghost" id="recover-cancel">Cancel</button>
+          <button class="btn" id="recover-go" data-testid="recover-go">Recover</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Guides modal -->
+    <div class="modal hidden" id="guides-modal" data-testid="guides-modal">
+      <div class="modal-card wide">
+        <div class="row-between">
+          <h3>📖 同伴攻略</h3>
+          <button class="btn-ghost" id="guides-close">✕</button>
+        </div>
+        <p class="muted">同学遇到相同问题时的 AI 建议（语义缓存自动沉淀），无需重复消耗 Token。</p>
+        <div id="guides-list" class="guides-list"></div>
+      </div>
+    </div>
+
+    <footer class="footer muted hidden" id="app-footer" data-testid="status-health">
+      <span id="health"></span>
+    </footer>
+
+    <script type="module" src="/app.js?v=7"></script>
+  </body>
+</html>
